@@ -12,6 +12,12 @@ defmodule Discuss.TopicController do
     render conn, "index.html", topics: topics
   end
 
+  def show(conn, %{"id" => topic_id}) do
+    topic = Repo.get!(Topic, topic_id)
+
+    render conn, "show.html", topic: topic
+  end
+
   def new(conn, _params) do
     changeset = Topic.changeset(%Topic{}, %{})
 
@@ -69,7 +75,7 @@ defmodule Discuss.TopicController do
     %{params: %{"id" => topic_id}} = conn
 
     cond do
-      conn.assigns.user.id == Repo.get(Topic, topic_id).user_id ->
+      conn.assigns.user.id == Repo.get!(Topic, topic_id).user_id ->
         conn
       true ->
         conn
